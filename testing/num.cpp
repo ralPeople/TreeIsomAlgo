@@ -1,0 +1,238 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define ln '\n'
+#define All(x) (x).begin(), (x).end()
+#define Allr(x) (x).rbegin(), (x).rend()
+#define Allf(x) x.begin() + 1, x.end()
+
+
+
+#define fi(a, b) for (auto i = (a); i <= (b); i++)
+#define fj(a, b) for (auto j = (a); j <= (b); j++)
+#define fo(a, b) for (auto o = (a); o <= (b); o++)
+#define fq(a, b) for (auto q = (a); q <= (b); q++)
+#define fe(a, b) for (auto e = (a); e <= (b); e++)
+#define fw(a, b) for (auto w = (a); w <= (b); w++)
+
+#define fdi(a, b) for (auto i = (a); i >= (b); i--)
+#define fdj(a, b) for (auto j = (a); j >= (b); j--)
+#define fdo(a, b) for (auto o = (a); o >= (b); o--)
+#define fdq(a, b) for (auto q = (a); q >= (b); q--)
+#define fde(a, b) for (auto e = (a); e >= (b); e--)
+#define fdw(a, b) for (auto w = (a); w >= (b); w--)
+
+#define FI(a, b, c) for (auto i = (a); i <= (b); i += (c))
+#define FJ(a, b, c) for (auto j = (a); j <= (b); j += (c))
+#define FO(a, b, c) for (auto o = (a); o <= (b); o += (c))
+#define FQ(a, b, c) for (auto q = (a); q <= (b); q += (c))
+#define FE(a, b, c) for (auto e = (a); e <= (b); e += (c))
+
+#define FRI(a, b, c) for (auto i = (a); i >= (b); i -= (c))
+#define FRJ(a, b, c) for (auto j = (a); j >= (b); j -= (c))
+#define FRO(a, b, c) for (auto o = (a); o >= (b); o -= (c))
+#define FRQ(a, b, c) for (auto q = (a); q >= (b); q -= (c))
+#define FRE(a, b, c) for (auto e = (a); e >= (b); e -= (c))
+
+#define fx(A) for (auto &x : (A))
+#define fy(A) for (auto &y : (A))
+#define fz(A) for (auto &z : (A))
+
+#define pb push_back
+#define ins insert
+#define mp make_pair
+#define len(x) (int)(x).size()
+#define Len(x) (int)(x).size()
+#define sz(x) (int)x.size()
+
+#include <string>
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <cstring>
+#include <cmath>
+#include <cstdarg>
+#include <cassert>
+#include <ctime>
+#include <tuple>
+#include <unordered_set>
+#include <unordered_map>
+#include <random>
+#include <chrono>
+#include <optional>
+
+using namespace std;
+
+#ifdef _DEBUG
+#define LOCAL
+#endif
+
+mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef long double ld;
+
+typedef vector<bool> vb;
+typedef vector<int> vi;
+typedef vector<ll> vll;
+typedef vector<ld> vd;
+typedef vector<char> vc;
+typedef vector<string> vs;
+
+typedef vector<vb> vvb;
+typedef vector<vi> vvi;
+typedef vector<vll> vvll;
+typedef vector<vc> vvc;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+
+template<typename A, typename B>
+ostream& operator<<(ostream& os, pair<A, B> p) {
+	os << "(" << p.first << ", " << p.second << ")";
+	return os;
+}
+ 
+template<typename T>
+ostream& operator<<(ostream& os, vector<T> v) {
+	fi(0, sz(v) - 1) {
+		os << v[i] << " ";
+	}
+	return os;
+}
+ 
+template<typename T>
+ostream& operator<<(ostream& os, set<T> t) {
+	for (auto z : t) {
+		os << z << " ";
+	}
+	return os;
+}
+ 
+template<typename T1, typename T2>
+ostream& operator<<(ostream& os, map<T1, T2> t) {
+	cerr << endl;
+	for (auto z : t) {
+		os << "\t" << z.first << " -> " << z.second << endl;
+	}
+	return os;
+}
+ 
+#ifdef LOCAL
+#define dbg(x) {cerr << __LINE__ << "\t" << #x << ": " << (x) << endl;}
+#else
+#define dbg(x) {}
+#endif
+ 
+#ifdef LOCAL
+#define ass(x) if (!(x)) { cerr << __LINE__ << "\tassertion failed: " << #x << endl, abort(); }
+#else
+#define ass(x) assert(x)
+#endif
+map<vll,ll>t;
+ll K = 0;
+struct Tree{
+    int n;
+    vector<vector<int>>e;
+    void input() {
+        cin >> n;
+        e = vector<vector<int>>(n+1);
+        for(int i = 2; i <= n; i++) {
+            int x,y;
+            cin >> x >> y;
+            e[x].push_back(y);
+            e[y].push_back(x);
+        }
+    }
+    ll dfs(int x, int p) {
+        vll D;
+        for(auto& y : e[x]) {
+            if(y == p) continue;
+            ll v = dfs(y,x);
+            D.pb(v);
+        }
+        if(sz(D) == 0) return 0;
+        sort(All(D));
+        if(t.find(D) != t.end()) return t[D];
+        K++;
+        return t[D] = K;
+    }
+};
+
+
+vll get_centr(Tree& T) {
+    vll res;
+    vll s(T.n+1);
+    vll parent(T.n+1);
+    auto dfs = [&](int x, int p, auto&& dfs) -> void {
+            s[x] = 1;
+            parent[x] = p;
+            for(auto&y : T.e[x]) {
+                if(y == p) continue;
+                dfs(y, x, dfs);
+                s[x] += s[y];
+            }
+    };
+    ll n = T.n;
+    dfs(1,-1, dfs);
+    for(int i = 1; i <= T.n; i++) {
+    	ll sum = 0;
+    	bool f = 1;
+    	for(auto&y : T.e[i]) {
+    		if(y == parent[i]) continue;
+    		sum += s[y];
+    		if(s[y] <= n / 2) continue;
+    		f = 0;
+    	}
+    	if(f) {
+    		if(n-1-sum<=n/2)res.pb(i);
+    	}
+    	
+    }
+    
+    return res;
+}
+int main() {
+	ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    #ifdef LOCAL
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
+    #endif
+    Tree T,G;
+    T.input();
+    G.input();
+    if(T.n != G.n) {
+        cout << "No" << ln;
+        return 0;
+    }
+    if(T.n == 1) {
+        cout << "Yes" << ln;
+        return 0;
+    }
+    vll A = get_centr(T);
+    vll B = get_centr(G);
+    dbg(A);
+    dbg(B);
+    fx(A) {
+        ll val = T.dfs(x,0);
+        fy(B) {
+            if(val == G.dfs(y,0)) {
+                cout << "Yes" << ln;
+                return 0;
+            }
+        }
+    }
+    cout << "No" << ln;
+}
